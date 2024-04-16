@@ -39,5 +39,36 @@ class PawnTest(unittest.TestCase):
         excepted = [Position(1, 2)]
         self.assertEqual(p1.get_possible_moves(), excepted)
 
+class RookTest(unittest.TestCase):
+    def test_first_row(self):
+        r = Rook("white", Position(0, 0), Game())
+        pos = r.get_possible_moves()
+        expected = [
+            Position(1, 0),
+            Position(2, 0),
+            Position(3, 0),
+            Position(4, 0),
+            Position(5, 0),
+            Position(6, 0),
+            Position(7, 0)
+        ]
+        self.assertEqual(pos, expected)
+
+    def test_last_row(self):
+        r = Rook("white", Position(0, 7), Game())
+        pos = r.get_possible_moves()
+        expected = [
+            Position(0, 6),
+            Position(0, 5),
+            Position(0, 4),
+            Position(0, 3),
+            Position(0, 2),
+            Position(0, 1)
+        ]
+        self.assertEqual(pos, expected)
+
+    
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -10,7 +10,7 @@ class Position:
 @dataclass
 class Piece(ABC):
     color: str
-    p: Position
+    p: Position = None
     g: 'Game' = None
 
     @abstractmethod
@@ -51,7 +51,37 @@ class Pawn(Piece):
 class Rook(Piece):
 
     def get_possible_moves(self) -> list[Position]:
-        return []
+        positions = []
+        for i in range(self.p.x + 1, 8):
+            if self.g.board[self.p.y][i] is None:
+                positions.append(Position(i, self.p.y))
+            else:
+                if self.g.board[self.p.y][i].color != self.color:
+                    positions.append(Position(i, self.p.y))
+                break
+        for i in range(self.p.x - 1, -1, -1):
+            if self.g.board[self.p.y][i] is None:
+                positions.append(Position(i, self.p.y))
+            else:
+                if self.g.board[self.p.y][i].color != self.color:
+                    positions.append(Position(i, self.p.y))
+                break
+        for i in range(self.p.y + 1, 8):
+            if self.g.board[i][self.p.x] is None:
+                positions.append(Position(self.p.x, i))
+            else:
+                if self.g.board[i][self.p.x].color != self.color:
+                    positions.append(Position(self.p.x, i))
+                break
+        for i in range(self.p.y - 1, -1, -1):
+            if self.g.board[i][self.p.x] is None:
+                positions.append(Position(self.p.x, i))
+            else:
+                if self.g.board[i][self.p.x].color != self.color:
+                    positions.append(Position(self.p.x, i))
+                break
+        return positions
+        
     
     def __str__(self) -> str:
         return '♖' if self.color == "white" else '♜'
@@ -60,18 +90,27 @@ class Knight(Piece):
     
     def __str__(self) -> str:
         return '♘' if self.color == "white" else '♞'
+    
+    def get_possible_moves(self) -> list[Position]:
+        pass
 
 class Bishop(Piece):
     
     def __str__(self) -> str:
         return '♗' if self.color == "white" else '♝'
+    def get_possible_moves(self) -> list[Position]:
+        pass
 
 class Queen(Piece):
     
     def __str__(self) -> str:
         return '♕' if self.color == "white" else '♛'
+    def get_possible_moves(self) -> list[Position]:
+        pass
 
 class King(Piece):
     
     def __str__(self) -> str:
         return '♔' if self.color == "white" else '♚'
+    def get_possible_moves(self) -> list[Position]:
+        pass

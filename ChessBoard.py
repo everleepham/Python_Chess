@@ -1,38 +1,5 @@
-from typing import List, Tuple
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-
-@dataclass
-class Piece(ABC):
-    color: str 
-
-    @abstractmethod
-    def __str__(self):
-        pass
-
-class Pawn(Piece):
-    def __str__(self):
-        return '♙' if self.color == 'white' else '♟︎'
-
-class Rook(Piece):
-    def __str__(self):
-        return '♖' if self.color == 'white' else '♜'
-
-class Knight(Piece):
-    def __str__(self):
-        return '♘' if self.color == 'white' else '♞'
-
-class Bishop(Piece):
-    def __str__(self):
-        return '♗' if self.color == 'white' else '♝'
-
-class Queen(Piece):
-    def __str__(self):
-        return '♕' if self.color == 'white' else '♛'
-
-class King(Piece):
-    def __str__(self):
-        return '♔' if self.color == 'white' else '♚'
+from typing import List
+from Piece import *
 
 class Game:
     board: List[List[Piece]]
@@ -60,6 +27,13 @@ class Game:
         [R(b), N(b), B(b), Q(b), K(b), B(b), N(b), R(b)]
         ]
 
+        for y in range(8):
+            for x in range(8):
+                piece = self.board[y][x]
+                if piece is not None:
+                    piece.p = Position(x, y)
+                    piece.g = self
+
     def print(self):
         output = ''
         for line in self.board:
@@ -70,6 +44,40 @@ class Game:
                     output += '  '
             output += '\n'
         print(output, end='')
+    def is_checkmate(self) -> bool:
+        # FIX ME
+        return False
+    
+    def move_piece(self, src: Position, dst: Position) -> None:
+        '''Move the piece to the destination, 
+        if the move is not valid, raise an exception'''
+        
+        if not (0 <= src.x <= 7 and 0 <= src.y <= 7 and
+                0 <= dst.x <= 7 and 0 <= dst.y <= 7):
+            raise RuntimeError("Invalid move")
+        
+        piece = self.board[src.y][src.x]
+        if piece is None:
+            raise RuntimeError("No piece at the source position")
+        valid_positions = piece.get_possible_moves()
+        if dst not in valid_positions:
+            raise RuntimeError("Invalid move") # why RuntimeError?
+        self.board[dst.y][dst.x] = piece
+        self.board[src.y][src.x] = None
+        piece.p = dst
+
     
 g = Game()
 g.print()
+
+p1 = Position(2, 3)
+p2 = Position(2, 3)
+print("Is p1 and p2 equal?", p1 == p2)
+
+class PositionTwo:
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+p1 = PositionTwo(2, 3)
+p2 = PositionTwo(2, 3)
+print("Is p1 and p2 equal?", p1 == p2)
