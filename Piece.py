@@ -134,36 +134,99 @@ class Bishop(Piece):
             (-1, 1),
             (-1, -1),
         ]
-        # for offset in offsets:
-        #     new_x = self.p.x + offset[0]
-        #     new_y = self.p.y + offset[1]
-        #     if 0 <= new_x <= 7 and 0 <= new_y <= 7:
-        #         if (
-        #             self.g.board[new_y][new_x] is None
-        #             or self.g.board[new_y][new_x].color != self.color
-        #         ):
-        #             positions.append(Position(new_x, new_y))
 
-        while True:
-            
-            
-        
+        for offset in offsets:
+            new_x = self.p.x + offset[0]
+            new_y = self.p.y + offset[1]
+            while 0 <= new_x <= 7 and 0 <= new_y <= 7:
+                if self.g.board[new_y][new_x] is None:
+                    positions.append(Position(new_x, new_y))
+                else:
+                    if self.g.board[new_y][new_x].color != self.color:
+                        positions.append(Position(new_x, new_y))
+                    break
+                new_x += offset[0]
+                new_y += offset[1]
+        return positions
 
-
+        # # for offset in offsets:
+        # #     x = self.p.x + offset[0]
+        # #     y = self.p.y + offset[1]
+        # #     if self.g.board[x][y].color != self.color:
+        # #         positions.append(Position(x, y))
+        # #         break
+        # #     x += offset[0]
+        # #     y += offset[1]
+        # # return positions
 
 class Queen(Piece):
-
     def __str__(self) -> str:
         return "♕" if self.color == "white" else "♛"
 
     def get_possible_moves(self) -> list[Position]:
-        pass
+        positions = []
+
+        # cross move 
+        offsets = [
+            (1, 1),
+            (1, -1),
+            (-1, 1),
+            (-1, -1),
+        ]
+
+        for offset in offsets:
+            new_x = self.p.x + offset[0]
+            new_y = self.p.y + offset[1]
+            while 0 <= new_x <= 7 and 0 <= new_y <= 7:
+                if self.g.board[new_y][new_x] is None:
+                    positions.append(Position(new_x, new_y))
+                else:
+                    if self.g.board[new_y][new_x].color != self.color:
+                        positions.append(Position(new_x, new_y))
+                    break
+                new_x += offset[0]
+                new_y += offset[1]
+
+        # horizontal and vertical moves
+        for direction in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            dx, dy = direction
+            x, y = self.p.x + dx, self.p.y + dy
+            while 0 <= x <= 7 and 0 <= y <= 7:
+                if self.g.board[y][x] is None:
+                    positions.append(Position(x, y))
+                else:
+                    if self.g.board[y][x].color != self.color:
+                        positions.append(Position(x, y))
+                    break
+                x += dx
+                y += dy
+        return positions
 
 
 class King(Piece):
-
     def __str__(self) -> str:
         return "♔" if self.color == "white" else "♚"
 
     def get_possible_moves(self) -> list[Position]:
-        pass
+        positions = []
+        offsets = [
+            (0, 1),
+            (0, -1),
+            (1, 0),
+            (-1, 0),
+            (1, 1),
+            (1, -1),
+            (-1, 1),
+            (-1, -1),
+        ]
+        for offset in offsets:
+            new_x = self.p.x + offset[0]
+            new_y = self.p.y + offset[1]
+            if 0 <= new_x <= 7 and 0 <= new_y <= 7:
+                if (
+                    self.g.board[new_y][new_x] is None
+                    or self.g.board[new_y][new_x].color != self.color
+                ):
+                    positions.append(Position(new_x, new_y))
+        return positions
+    
