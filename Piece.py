@@ -98,6 +98,8 @@ class Knight(Piece):
         return "♘" if self.color == "white" else "♞"
 
     def get_possible_moves(self) -> list[Position]:
+        if self.g is None:
+            return [] 
         positions = []
         offsets = [
             (2, 1),
@@ -149,15 +151,15 @@ class Bishop(Piece):
                 new_y += offset[1]
         return positions
 
-        # # for offset in offsets:
-        # #     x = self.p.x + offset[0]
-        # #     y = self.p.y + offset[1]
-        # #     if self.g.board[x][y].color != self.color:
-        # #         positions.append(Position(x, y))
-        # #         break
-        # #     x += offset[0]
-        # #     y += offset[1]
-        # # return positions
+        # for offset in offsets:
+        #     x = self.p.x + offset[0]
+        #     y = self.p.y + offset[1]
+        #     if self.g.board[x][y].color != self.color:
+        #         positions.append(Position(x, y))
+        #         break
+        #     x += offset[0]
+        #     y += offset[1]
+        # return positions
 
 class Queen(Piece):
     def __str__(self) -> str:

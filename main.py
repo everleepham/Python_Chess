@@ -22,6 +22,9 @@ while True:
 
     g.print()
 
+    if g.is_check():
+        print("Check!")
+
     if g.is_checkmate():
         print("Checkmate!")
         break
